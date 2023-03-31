@@ -42,7 +42,6 @@ public class Point {
   }
   // TODO: Create a stub for getTime()
   public ZonedDateTime getTime() {
-
 	  return timestamp;
   }
   // TODO: Create a stub for getLatitude()

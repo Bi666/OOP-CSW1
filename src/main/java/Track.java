@@ -9,6 +9,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.time.temporal.ChronoUnit;
+
 public class Track {
   // TODO: Create a stub for the constructor
 	private List<Point> points;
@@ -51,10 +53,45 @@ public class Track {
         return this.points.size();
     }
   // TODO: Create a stub for lowestPoint()
+    public Point lowestPoint() throws GPSException {
+        if (points.size() < 1) {
+            throw new GPSException("Not enough points in the track.");
+        }
+        // implementation!!!!!!!加步骤
+    }
 
   // TODO: Create a stub for highestPoint()
-
+    public Point highestPoint() throws GPSException {
+        if (points.size() < 1) {
+            throw new GPSException("Not enough points in the track.");
+        }
+        // implementation!!!!!!!!!
+    }
+    
   // TODO: Create a stub for totalDistance()
-
+    public double totalDistance() throws GPSException {
+        if (points.size() < 2) {
+            throw new GPSException("Not enough points in the track.");
+        }
+        double distance = 0.0;
+        for (int i = 1; i < points.size(); i++) {
+        	distance += Point.greatCircleDistance(points.get(i-1), points.get(i));
+        }
+        return distance;
+    }
+    
   // TODO: Create a stub for averageSpeed()
+    public double averageSpeed() throws GPSException {
+        if (points.size() < 2) {
+            throw new GPSException("Not enough points in the track.");
+        }
+        double distance = totalDistance();
+        ZonedDateTime startTime = points.get(0).getTime();
+        ZonedDateTime endTime = points.get(points.size()-1).getTime();
+        long timeInterval = ChronoUnit.SECONDS.between(startTime, endTime);
+        if (timeInterval == 0) {
+            throw new GPSException("Time interval cannot be zero.");
+        }
+        return distance / (double)timeInterval;
+    }
 }
