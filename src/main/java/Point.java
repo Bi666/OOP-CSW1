@@ -1,18 +1,11 @@
-import java.time.ZonedDateTime;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-import static java.lang.Math.toRadians;
-
-
 /**
  * Represents a point in space and time, recorded by a GPS sensor.
  *
  * @author Wang Biliu
  */
+import java.time.ZonedDateTime;
+import static java.lang.Math.*;
+
 public class Point {
   // Constants useful for bounds checking, etc
 

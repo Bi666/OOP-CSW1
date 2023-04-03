@@ -13,6 +13,10 @@ import java.time.temporal.ChronoUnit;
 
 public class Track {
   // TODO: Create a stub for the constructor
+	public Track(){
+		points = new ArrayList<>();
+	}
+	
 	private List<Point> points;
 
     public Track(String filename) throws IOException, GPSException {
@@ -57,7 +61,15 @@ public class Track {
         if (points.size() < 1) {
             throw new GPSException("Not enough points in the track.");
         }
-        // implementation!!!!!!!加步骤
+        double lowest = 10000.0;
+        Point lowele = null;
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).getElevation() < lowest) {
+                lowele = points.get(i);
+                lowest = points.get(i).getElevation();
+            };
+        }
+        return lowele;
     }
 
   // TODO: Create a stub for highestPoint()
@@ -65,7 +77,15 @@ public class Track {
         if (points.size() < 1) {
             throw new GPSException("Not enough points in the track.");
         }
-        // implementation!!!!!!!!!
+        double highest = 10000.0;
+        Point highele = null;
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).getElevation() < highest) {
+            	highele = points.get(i);
+                highest = points.get(i).getElevation();
+            };
+        }
+        return highele;
     }
     
   // TODO: Create a stub for totalDistance()
