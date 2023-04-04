@@ -4,12 +4,14 @@
  * @author Wang Biliu
  */
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
 
 public class Track {
   // TODO: Create a stub for the constructor
@@ -24,21 +26,37 @@ public class Track {
         this.readFile(filename);
     }
   // TODO: Create a stub for readFile()
-	private void readFile(String filename) throws IOException, GPSException {
+    public void readFile(String filename) throws IOException, GPSException {
+    	points.clear();
         Scanner scanner = new Scanner(new File(filename));
+        scanner.nextLine(); // skip header line
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] parts = line.split(",");
             if (parts.length != 4) {
                 throw new GPSException("Invalid number of values in line: " + line);
             }
-            double latitude = Double.parseDouble(parts[0]);
+            // Add null/empty check for each field
+            if (parts[0] == null || parts[0].isEmpty()) {
+                throw new GPSException("Timestamp is null: " + line);
+            }
+            if (parts[1] == null || parts[1].isEmpty()) {
+                throw new GPSException("Latitude is null: " + line);
+            }
+            if (parts[2] == null || parts[2].isEmpty()) {
+                throw new GPSException("Longitude is null: " + line);
+            }
+            if (parts[3] == null || parts[3].isEmpty()) {
+                throw new GPSException("Elevation is null: " + line);
+            }
+            ZonedDateTime timestamp = ZonedDateTime.parse(parts[0]);
             double longitude = Double.parseDouble(parts[1]);
-            double elevation = Double.parseDouble(parts[2]);
-            ZonedDateTime timestamp = ZonedDateTime.parse(parts[3]);
-            Point point = new Point(timestamp, longitude, elevation, latitude);
+            double latitude = Double.parseDouble(parts[2]);
+            double elevation = Double.parseDouble(parts[3]);
+            Point point = new Point(timestamp, longitude, latitude, elevation);
             this.add(point);
         }
+
         scanner.close();
     }
   // TODO: Create a stub for add()
@@ -77,10 +95,10 @@ public class Track {
         if (points.size() < 1) {
             throw new GPSException("Not enough points in the track.");
         }
-        double highest = 10000.0;
+        double highest = -10000.0;
         Point highele = null;
         for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getElevation() < highest) {
+            if (points.get(i).getElevation() > highest) {
             	highele = points.get(i);
                 highest = points.get(i).getElevation();
             };
@@ -113,5 +131,36 @@ public class Track {
             throw new GPSException("Time interval cannot be zero.");
         }
         return distance / (double)timeInterval;
+    }
+
+    public void writeKML(String filename) throws IOException {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+
+        try (FileWriter writer = new FileWriter(filename)) {
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            writer.write("<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n");
+            writer.write("<Document>\n");
+            writer.write("<name>" + filename + "</name>\n");
+
+            for (int i = 0; i < this.points.size(); i++) {
+                Point point = this.points.get(i);
+                ZonedDateTime time = point.getTime();
+                double lat = point.getLatitude();
+                double lon = point.getLongitude();
+                double ele = point.getElevation();
+
+                writer.write("<Placemark>\n");
+                writer.write("<name>" + time.format(dateFormatter) + " " + time.format(timeFormatter) + "</name>\n");
+                writer.write("<description>Elevation: " + ele + "</description>\n");
+                writer.write("<Point>\n");
+                writer.write("<coordinates>" + lon + "," + lat + "," + ele + "</coordinates>\n");
+                writer.write("</Point>\n");
+                writer.write("</Placemark>\n");
+            }
+
+            writer.write("</Document>\n");
+            writer.write("</kml>\n");
+        }
     }
 }

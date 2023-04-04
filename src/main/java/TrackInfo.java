@@ -6,7 +6,10 @@
 public class TrackInfo {
   public static void main(String[] args) {
     // TODO: Implementation TrackInfo application here
-	  if (args.length != 1) {}
+	  if (args.length == 0) {
+		    System.err.println("Error: One file name expected.");
+		    System.exit(1);
+		}
 	  try {
 		  Track track = new Track(args[0]);
 		  System.out.printf("%d points in track%n", track.size());
@@ -22,8 +25,8 @@ public class TrackInfo {
 		  double avgSpeed = track.averageSpeed();
 		  System.out.printf("Average speed = %3f m/s%n", avgSpeed);
 	  }
-	  catch (Exception error) {
-		  System.err.println("Error: " + error.getMessage());
+	  catch (Exception e) {
+		  System.err.println("Error: " + e.getMessage());
 		  System.exit(2);
 	  }
   }

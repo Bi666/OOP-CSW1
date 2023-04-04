@@ -1,7 +1,7 @@
 /**
  * Represents a GPS-related exception.
  *
- * @author Nick Efford
+ * @author Wang Biliu
  */
 public class GPSException extends RuntimeException {
   public GPSException(String message) {
