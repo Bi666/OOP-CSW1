@@ -3,8 +3,7 @@
  *
  * @author Wang Biliu
  */
-import java.io.File;
-import java.io.FileWriter;
+import java.io.File;;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 
 public class Track {
-  // TODO: Create a stub for the constructor
 	public Track(){
 		points = new ArrayList<>();
 	}
@@ -25,14 +23,18 @@ public class Track {
         this.points = new ArrayList<>();
         this.readFile(filename);
     }
-  // TODO: Create a stub for readFile()
+
     public void readFile(String filename) throws IOException, GPSException {
     	points.clear();
+    	// Opening the file
         Scanner scanner = new Scanner(new File(filename));
-        scanner.nextLine(); // skip header line
+        // skip header line
+        scanner.nextLine();
+        // Reading file data
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] parts = line.split(",");
+            // Determine the number of data is complete
             if (parts.length != 4) {
                 throw new GPSException("Invalid number of values in line: " + line);
             }
@@ -59,22 +61,22 @@ public class Track {
 
         scanner.close();
     }
-  // TODO: Create a stub for add()
+
     public void add(Point point) {
         this.points.add(point);
     }
-  // TODO: Create a stub for get()
+
     public Point get(int index) throws GPSException {
         if (index < 0 || index >= this.size()) {
             throw new GPSException("Index out of bounds");
         }
         return this.points.get(index);
     }
-  // TODO: Create a stub for size()
+
     public int size() {
         return this.points.size();
     }
-  // TODO: Create a stub for lowestPoint()
+
     public Point lowestPoint() throws GPSException {
         if (points.size() < 1) {
             throw new GPSException("Not enough points in the track.");
@@ -90,7 +92,6 @@ public class Track {
         return lowele;
     }
 
-  // TODO: Create a stub for highestPoint()
     public Point highestPoint() throws GPSException {
         if (points.size() < 1) {
             throw new GPSException("Not enough points in the track.");
@@ -105,8 +106,7 @@ public class Track {
         }
         return highele;
     }
-    
-  // TODO: Create a stub for totalDistance()
+
     public double totalDistance() throws GPSException {
         if (points.size() < 2) {
             throw new GPSException("Not enough points in the track.");
@@ -117,13 +117,13 @@ public class Track {
         }
         return distance;
     }
-    
-  // TODO: Create a stub for averageSpeed()
+
     public double averageSpeed() throws GPSException {
         if (points.size() < 2) {
             throw new GPSException("Not enough points in the track.");
         }
         double distance = totalDistance();
+        // Get the start and end time
         ZonedDateTime startTime = points.get(0).getTime();
         ZonedDateTime endTime = points.get(points.size()-1).getTime();
         long timeInterval = ChronoUnit.SECONDS.between(startTime, endTime);
@@ -131,36 +131,5 @@ public class Track {
             throw new GPSException("Time interval cannot be zero.");
         }
         return distance / (double)timeInterval;
-    }
-
-    public void writeKML(String filename) throws IOException {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
-
-        try (FileWriter writer = new FileWriter(filename)) {
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.write("<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n");
-            writer.write("<Document>\n");
-            writer.write("<name>" + filename + "</name>\n");
-
-            for (int i = 0; i < this.points.size(); i++) {
-                Point point = this.points.get(i);
-                ZonedDateTime time = point.getTime();
-                double lat = point.getLatitude();
-                double lon = point.getLongitude();
-                double ele = point.getElevation();
-
-                writer.write("<Placemark>\n");
-                writer.write("<name>" + time.format(dateFormatter) + " " + time.format(timeFormatter) + "</name>\n");
-                writer.write("<description>Elevation: " + ele + "</description>\n");
-                writer.write("<Point>\n");
-                writer.write("<coordinates>" + lon + "," + lat + "," + ele + "</coordinates>\n");
-                writer.write("</Point>\n");
-                writer.write("</Placemark>\n");
-            }
-
-            writer.write("</Document>\n");
-            writer.write("</kml>\n");
-        }
     }
 }

@@ -1,7 +1,7 @@
-/**
- * Represents a point in space and time, recorded by a GPS sensor.
- *
- * @author Wang Biliu
+/*
+  Represents a point in space and time, recorded by a GPS sensor.
+
+  @author Wang Biliu
  */
 import java.time.ZonedDateTime;
 import static java.lang.Math.*;
@@ -20,7 +20,6 @@ public class Point {
   private double latitude;
   private double elevation;
 
-  // TODO: Create a stub for the constructor
   public Point(ZonedDateTime timestamp, double longitude, double latitude, double elevation) throws GPSException {
       if (longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
           throw new GPSException("Invalid longitude: " + longitude);
@@ -33,23 +32,23 @@ public class Point {
       this.latitude = latitude;
       this.elevation = elevation;
   }
-  // TODO: Create a stub for getTime()
+
   public ZonedDateTime getTime() {
 	  return timestamp;
   }
-  // TODO: Create a stub for getLatitude()
+
   public double getLatitude() {
       return latitude;
   }
-  // TODO: Create a stub for getLongitude()
+
   public double getLongitude() {
       return longitude;
   }
-  // TODO: Create a stub for getElevation()
+
   public double getElevation() {
       return elevation;
   }
-  // TODO: Create a stub for toString()
+
   @Override 
   public String toString() {
 	  return String.format("(%.5f, %.5f), %.1f m", longitude, latitude, elevation);
