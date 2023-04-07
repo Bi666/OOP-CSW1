@@ -24,7 +24,7 @@ public class TrackInfo {
 		  System.out.printf("%d points in track%n", track.size());
 		  Point lowest = track.lowestPoint();
 		  Point highest = track.highestPoint();
-		  System.out.printf("lowest point is %s%n", lowest);
+		  System.out.printf("Lowest point is %s%n", lowest);
 		  System.out.printf("Highest point is %s%n", highest);
 		  
 		  double distKm = track.totalDistance() / 1000.0;

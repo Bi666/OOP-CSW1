@@ -1,16 +1,15 @@
-/**
- * Represents a point in space and time, recorded by a GPS sensor.
- *
- * @author Wang Biliu
+/*
+  Represents a point in space and time, recorded by a GPS sensor.
+
+  @author Wang Biliu
  */
-import java.io.File;;
+import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.temporal.ChronoUnit;
-import java.time.format.DateTimeFormatter;
 
 public class Track {
 	public Track(){
@@ -83,11 +82,11 @@ public class Track {
         }
         double lowest = 10000.0;
         Point lowele = null;
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getElevation() < lowest) {
-                lowele = points.get(i);
-                lowest = points.get(i).getElevation();
-            };
+        for (Point point : points) {
+            if (point.getElevation() < lowest) {
+                lowele = point;
+                lowest = point.getElevation();
+            }
         }
         return lowele;
     }
@@ -98,11 +97,11 @@ public class Track {
         }
         double highest = -10000.0;
         Point highele = null;
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getElevation() > highest) {
-            	highele = points.get(i);
-                highest = points.get(i).getElevation();
-            };
+        for (Point point : points) {
+            if (point.getElevation() > highest) {
+                highele = point;
+                highest = point.getElevation();
+            }
         }
         return highele;
     }
